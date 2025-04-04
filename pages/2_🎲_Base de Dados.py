@@ -16,6 +16,7 @@ st.title("Base de Dados", anchor=False)
 st.write("")
 
 estacao = df.groupby("ID")["NM"].sum()
+ribeirao_preto = estacao[df['NM'] == 'RIBEIRÃO PRETO']
 st.write(df)
 st.write(estacao)
 
