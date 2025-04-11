@@ -158,4 +158,17 @@ with col2:
     """,
     unsafe_allow_html=True)
     
-    
+    st.write("")
+    st.markdown("""
+        <style>
+            .justificado {
+                text-align: justify;
+            }
+        </style>
+
+        <h2>Hipótese</h2>
+
+        <p class="justificado">Na estação Ribeirão Preto ao longo do tempo, com os dados que temos e analisamos é possivel prever que os mêses de julho se manterão com uma média de 22mm de chuva.</p>
+        """,
+        unsafe_allow_html=True
+        )
