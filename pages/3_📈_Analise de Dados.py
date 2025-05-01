@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import plotly.graph_objects as go
+import seaborn as sns
 
 st.set_page_config(
     page_title="Dados",
@@ -48,7 +49,18 @@ with col2:
     filtro = df["NM"].str.contains("RIBEIRÃO PRETO", case=False, na=False)
     df_filtrado = df[filtro]
     
-    colunas = ["X", "Y", "ID", "NM", "RESPON", "DINI", "DFIM", "MED_ANUAL", "MIN_ANUAL", "MAX_ANUAL", "N_JUL", "MED_JUL", "MIN_JUL", "MAX_JUL"]
+    colunas = ["NM", "MIN_JAN", "MED_JAN", "MAX_JAN",
+        "MIN_FEV", "MED_FEV", "MAX_FEV",
+        "MIN_MAR", "MED_MAR", "MAX_MAR",
+        "MIN_ABR", "MED_ABR", "MAX_ABR",
+        "MIN_MAI", "MED_MAI", "MAX_MAI",
+        "MIN_JUN", "MED_JUN", "MAX_JUN",
+        "MIN_JUL", "MED_JUL", "MAX_JUL",
+        "MIN_AGO", "MED_AGO", "MAX_AGO",
+        "MIN_SET", "MED_SET", "MAX_SET",
+        "MIN_OUT", "MED_OUT", "MAX_OUT",
+        "MIN_NOV", "MED_NOV", "MAX_NOV",
+        "MIN_DEZ", "MED_DEZ", "MAX_DEZ"]
     df_rp = df_filtrado[colunas]
     st.write(df_rp)
     
@@ -66,96 +78,69 @@ with col2:
         unsafe_allow_html=True
         )
     
-    filtro = df["NM"].str.contains("RIBEIRÃO PRETO", case=False, na=False)
-    df_filtrado = df[filtro]
+
+    meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 
+         'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
+
+    # Inicializar listas para os resultados
+    min_mensal = []
+    med_mensal = []
+    max_mensal = []
+    erro_padrao_mensal = []
     
-    colunas = ["X", "Y", "ID", "NM", "RESPON", "DINI", "DFIM", "MED_ANUAL", "MIN_ANUAL", "MAX_ANUAL", "N_JUL", "MED_JUL", "MIN_JUL", "MAX_JUL"]
-    df_rp = df_filtrado[colunas]
-
-    def intervalo_confianca(data, confidence=0.95):
-        data = data.dropna()  # remove valores ausentes
-        n = len(data)
-        mean = np.mean(data)
-        std_err = stats.sem(data)
-        h = std_err * stats.t.ppf((1 + confidence) / 2, n - 1)
-        return mean, mean - h, mean + h
-
-    variaveis_analise = ['MED_JUL']
-    resultados = []
-
-    for var in variaveis_analise:
-        media, ic_min, ic_max = intervalo_confianca(df_rp[var])
-        resultados.append({
-            "Variável": var,
-            "Média": round(media, 2),
-            "IC 95% Inferior": round(ic_min, 2),
-            "IC 95% Superior": round(ic_max, 2)
-        })
-
-    df_ic = pd.DataFrame(resultados)
-    st.dataframe(df_ic, use_container_width=True)
+    for mes in meses:
+        col_min = f"MIN_{mes}"
+        col_med = f"MED_{mes}"
+        col_max = f"MAX_{mes}"
+        
+        # Calcular a menor mínima, média das médias e maior máxima
+        menor_min = df_rp[col_min].min()
+        media_med = df_rp[col_med].mean()
+        maior_max = df_rp[col_max].max()
+        
+        # Calcular o erro padrão para a média (considerando n como o número de estações)
+        erro_padrao = df_rp[col_med].std() / np.sqrt(len(df_rp))
+        
+        # Adicionar aos resultados
+        min_mensal.append(menor_min)
+        med_mensal.append(media_med)
+        max_mensal.append(maior_max)
+        erro_padrao_mensal.append(erro_padrao)
     
-    #st.markdown("""<h2>Distribuições com Intervalos de Confiança</h2>""", unsafe_allow_html=True)
-
-    #for var in variaveis_analise:
-    #    dados = df_rp[var].dropna()
-    #    media, ic_min, ic_max = intervalo_confianca(dados)
-
-    #    fig, ax = plt.subplots(figsize=(10, 4))
-    #    sns.histplot(dados, kde=True, bins=20, ax=ax, color="skyblue")
-    #    ax.axvline(media, color='blue', linestyle='--', label=f'Média ({media:.2f})')
-    #    ax.axvline(ic_min, color='red', linestyle=':', label=f'IC Inferior ({ic_min:.2f})')
-    #    ax.axvline(ic_max, color='green', linestyle=':', label=f'IC Superior ({ic_max:.2f})')
-    #    ax.set_title(f'Distribuição da variável {var}')
-    #    ax.legend()
-    #    st.pyplot(fig)
-
-    subcol1, subcol2, subcol3 = st.columns([1, 4, 1])
-    with subcol2:
-        media_med_jul, ic_min_med_jul, ic_max_med_jul = intervalo_confianca(df_rp['MED_JUL'])
-
-        fig, ax = plt.subplots()
-
-        ax.scatter(df_rp["NM"], df_rp['MED_JUL'], label='Medições de Julho', s=20)
-        plt.xticks(rotation=45, ha='right')
-
-        ax.axhline(media_med_jul, color='red', linestyle='-', linewidth=2, label=f'Média = {media_med_jul:.2f}')
-
-        ax.axhspan(ic_min_med_jul, ic_max_med_jul, color='gray', alpha=0.3, label='IC 95%')
-
-        # Adiciona rótulos e título
-        ax.set_xlabel("Índice")
-        ax.set_ylabel("Medição de Julho")
-        ax.set_title("Comparação com Intervalo de Confiança")
-        ax.legend()
-        ax.grid(True)
-
-        st.pyplot(fig)
-
-    st.markdown("""
-    <style>
-        .justificado {
-            text-align: justify;
-        }
-    </style>
-
-    <br>
-    <p class="justificado">
-    Para entender melhor os dados analisados, foram calculados os <b>intervalos de confiança de 95%</b> para algumas variáveis importantes relacionadas à precipitação em julho nas estações de Ribeirão Preto.
-    </p>
-
-    <p class="justificado">
-    O intervalo de confiança é uma faixa de valores onde temos uma alta probabilidade de que esteja a média real da variável analisada. No nosso caso, esse intervalo nos diz onde provavelmente está o valor verdadeiro da média de precipitação, com 95% de confiança.
-    </p>
-
-    <p class="justificado">
-    Por exemplo, se a média de precipitação em julho (MED_JUL) for 42,7 mm, com um intervalo de confiança entre 39,5 mm e 45,9 mm, isso significa que podemos afirmar, com 95% de certeza, que a média real está dentro desse intervalo.
-    </p>
-
-    <p class="justificado">
-    Esse tipo de análise ajuda a entender melhor a <b>confiabilidade dos dados</b>, e também a <b>comparar diferentes períodos ou regiões</b> com base em medidas mais precisas. Assim, mesmo que os dados tenham alguma variação natural, conseguimos tomar decisões e tirar conclusões com mais segurança.
-    </p>
-    """,
-    unsafe_allow_html=True)
+    # Criar DataFrame consolidado
+    df_resultado = pd.DataFrame({
+        'Mês': meses,
+        'Menor Índice Pluviométrico': min_mensal,
+        'Média dos Índices': med_mensal,
+        'Maior Índice Pluviométrico': max_mensal,
+        'Erro Padrão': erro_padrao_mensal
+    })
+    
+    # Streamlit: título
+    st.title('Resumo Mensal dos Índices Pluviométricos com Intervalo de Confiança')
+    
+    # Streamlit: exibir tabela de resultados
+    st.write(df_resultado)
+    
+    # Plotando o gráfico de barras com erro padrão
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    # Barra de média dos índices
+    ax.bar(df_resultado['Mês'], df_resultado['Média dos Índices'], yerr=df_resultado['Erro Padrão'], capsize=5, label='Média dos Índices', color='skyblue')
+    
+    # Adicionando as linhas de intervalo de confiança
+    ax.errorbar(df_resultado['Mês'], df_resultado['Média dos Índices'], yerr=df_resultado['Erro Padrão'], fmt='o', color='black', label='Intervalo de Confiança (Erro Padrão)')
+    
+    ax.set_title('Média dos Índices Pluviométricos com Intervalo de Confiança (Erro Padrão)')
+    ax.set_xlabel('Mês')
+    ax.set_ylabel('Índice Pluviométrico (mm)')
+    ax.legend()
+    ax.grid(True)
+    
+    # Exibir o gráfico no Streamlit
+    st.pyplot(fig)
+    
+    
+    
     
     
