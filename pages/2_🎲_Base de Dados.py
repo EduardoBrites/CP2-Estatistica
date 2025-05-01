@@ -61,7 +61,18 @@ with col2:
     filtro = df["NM"].str.contains("RIBEIRÃO PRETO", case=False, na=False)
     df_filtrado = df[filtro]
     
-    colunas = ["X", "Y", "ID", "NM", "RESPON", "DINI", "DFIM", "MED_ANUAL", "MIN_ANUAL", "MAX_ANUAL", "N_JUL", "MED_JUL", "MIN_JUL", "MAX_JUL"]
+    colunas = ["NM", "MIN_JAN", "MED_JAN", "MAX_JAN",
+        "MIN_FEV", "MED_FEV", "MAX_FEV",
+        "MIN_MAR", "MED_MAR", "MAX_MAR",
+        "MIN_ABR", "MED_ABR", "MAX_ABR",
+        "MIN_MAI", "MED_MAI", "MAX_MAI",
+        "MIN_JUN", "MED_JUN", "MAX_JUN",
+        "MIN_JUL", "MED_JUL", "MAX_JUL",
+        "MIN_AGO", "MED_AGO", "MAX_AGO",
+        "MIN_SET", "MED_SET", "MAX_SET",
+        "MIN_OUT", "MED_OUT", "MAX_OUT",
+        "MIN_NOV", "MED_NOV", "MAX_NOV",
+        "MIN_DEZ", "MED_DEZ", "MAX_DEZ"]
     df_rp = df_filtrado[colunas]
     st.write(df_rp)
 
@@ -80,20 +91,43 @@ with col2:
         unsafe_allow_html=True
         )
     dados_variaveis = [
-    {"Coluna": "X", "Descrição": "Longitude", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "Y", "Descrição": "Latitude", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "ID", "Descrição": "Identificador da estação", "Tipo": "Qualitativa nominal"},
-    {"Coluna": "NM", "Descrição": "Nome da estação", "Tipo": "Qualitativa nominal"},
-    {"Coluna": "RESPON", "Descrição": "Responsável pela estação", "Tipo": "Qualitativa nominal"},
-    {"Coluna": "DINI", "Descrição": "Data de início da coleta", "Tipo": "Qualitativa ordinal"},
-    {"Coluna": "DFIM", "Descrição": "Data de fim da coleta", "Tipo": "Qualitativa ordinal"},
-    {"Coluna": "MED_ANUAL", "Descrição": "Média anual de precipitação", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "MIN_ANUAL", "Descrição": "Mínima anual", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "MAX_ANUAL", "Descrição": "Máxima anual", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "N_JUL", "Descrição": "Quantidade de medições em julho", "Tipo": "Quantitativa discreta"},
-    {"Coluna": "MED_JUL", "Descrição": "Média de precipitação em julho", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "MIN_JUL", "Descrição": "Mínimo em julho", "Tipo": "Quantitativa contínua"},
-    {"Coluna": "MAX_JUL", "Descrição": "Máximo em julho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "NM", "Descrição": "Nome da estação", "Tipo": "Qualitativa nominal"},
+        {"Coluna": "MIN_JAN", "Descrição": "Mínimo em janeiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_JAN", "Descrição": "Média de precipitação em janeiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_JAN", "Descrição": "Máximo em janeiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_FEV", "Descrição": "Mínimo em fevereiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_FEV", "Descrição": "Média de precipitação em fevereiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_FEV", "Descrição": "Máximo em fevereiro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_MAR", "Descrição": "Mínimo em março", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_MAR", "Descrição": "Média de precipitação em março", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_MAR", "Descrição": "Máximo em março", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_ABR", "Descrição": "Mínimo em abril", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_ABR", "Descrição": "Média de precipitação em abril", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_ABR", "Descrição": "Máximo em abril", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_MAI", "Descrição": "Mínimo em maio", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_MAI", "Descrição": "Média de precipitação em maio", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_MAI", "Descrição": "Máximo em maio", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_JUN", "Descrição": "Mínimo em junho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_JUN", "Descrição": "Média de precipitação em junho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_JUN", "Descrição": "Máximo em junho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_JUL", "Descrição": "Mínimo em julho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_JUL", "Descrição": "Média de precipitação em julho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_JUL", "Descrição": "Máximo em julho", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_AGO", "Descrição": "Mínimo em agosto", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_AGO", "Descrição": "Média de precipitação em agosto", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_AGO", "Descrição": "Máximo em agosto", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_SET", "Descrição": "Mínimo em setembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_SET", "Descrição": "Média de precipitação em setembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_SET", "Descrição": "Máximo em setembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_OUT", "Descrição": "Mínimo em outubro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_OUT", "Descrição": "Média de precipitação em outubro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_OUT", "Descrição": "Máximo em outubro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_NOV", "Descrição": "Mínimo em novembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_NOV", "Descrição": "Média de precipitação em novembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_NOV", "Descrição": "Máximo em novembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MIN_DEZ", "Descrição": "Mínimo em dezembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MED_DEZ", "Descrição": "Média de precipitação em dezembro", "Tipo": "Quantitativa contínua"},
+        {"Coluna": "MAX_DEZ", "Descrição": "Máximo em dezembro", "Tipo": "Quantitativa contínua"}
     ]
 
     df_variaveis = pd.DataFrame(dados_variaveis)
